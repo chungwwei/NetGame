@@ -1,0 +1,21 @@
+.center {
+  margin: auto;
+  width: 50%;
+}
+
+.board {
+  width: 220px;
+  height: 220px;
+  border: 1px solid #000000;
+}
+
+.cell {
+  min-width: 50px;
+  min-height: 50px;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+  float: left;
+  border: solid #000000;
+  background-color: #787878;
+}

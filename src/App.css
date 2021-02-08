@@ -36,3 +36,102 @@
     transform: rotate(360deg);
   }
 }
+
+.center {
+  margin: auto;
+  width: 50%;
+}
+
+.board {
+  margin-top: 40px;
+  position: relative;
+  padding: 15px;
+  background: #bbada0;
+  border-radius: 8px;
+  width: 450px;
+  height: 450px;
+  box-sizing: border-box;
+  margin-bottom: 25px;
+}
+
+.grid_container {
+  position: absolute;
+  z-index: 1;
+}
+
+.grid_row {
+  margin-bottom: 15px;
+}
+
+.grid_cell {
+  width: 80px;
+  height: 80px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  float: left;
+  border-radius: 3px;
+  background: #aa3a44;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;       /* The same as your div height */
+}
+
+.grid_cell_empty {
+  width: 80px;
+  height: 80px;
+  margin-right:  3px;
+  margin-bottom: 3px;
+  float: left;
+  border-radius: 3px;
+  background: #069b6c;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;       /* The same as your div height */
+}
+
+
+
+
+.pipe_board {
+  margin-top: 40px;
+  position: relative;
+  padding: 15px;
+  background: #000000;
+  border-radius: 8px;
+  width: 1000px;
+  height: 1000px;
+  box-sizing: border-box;
+  margin-bottom: 25px;
+}
+
+.pipe_grid_row {
+  margin-bottom: 15px;
+}
+
+.pipe_grid_cell {
+  width: 80px;
+  height: 80px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  float: left;
+  border-radius: 3px;
+  background: #3f6cce;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;       /* The same as your div height */
+}
+
+.cell_path {
+  width: 80px;
+  height: 80px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  float: left;
+  border-radius: 3px;
+  background: #9939c2;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;       /* The same as your div height */
+}
+
+

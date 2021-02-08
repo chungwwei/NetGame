@@ -1,23 +1,20 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import BoardComponent from './components/BoardComponent';
+import { LightOff } from './game/LightOff';
+import FloodTubeComponent from './components/FloodTubeComponent';
+import { FloodTubes } from './game/FloodTube';
 
 function App() {
+  var light_off = new LightOff(5, 5)
+  var flood_tube = new FloodTubes(10, 10)
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h3>hello</h3>
+        <BoardComponent game={light_off}></BoardComponent>
+        <FloodTubeComponent game={flood_tube}></FloodTubeComponent>
       </header>
     </div>
   );
