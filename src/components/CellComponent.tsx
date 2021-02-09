@@ -82,7 +82,7 @@ export class CellComponent extends Component<CellProps> {
         // const i0 = require('../images/i0.png')
         return (
             <div
-                id={`node-${i}-${j}`}
+                id={`cell-${i}-${j}`}
                 className={`node ${cellClassName}`}
                 onClick={() => onClick(i, j, type)}
                 // onMouseDown={() => onMouseDown(row, col)}

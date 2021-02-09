@@ -31,8 +31,19 @@ export default class FloodTubeComponent extends React.Component<FloodTubeProps, 
 
   }
 
+  animatePath(path: number[][]) {
+    for (let i = 0; i < path.length; i++) {
+      setTimeout(() => {
+        const node = path[i];
+        document.getElementById(`cell-${node[0]}-${node[1]}`)!.className =
+          'pipe_grid_cell node-shortest-path';
+      }, 5 * i);
+    }
+  }
+
   runBFS() {
     let newPath = this.props.game.BFS()
+    this.animatePath(newPath)
     // for (let i = 0; i < newPath.length; i ++) {
     //   setTimeout(()=>{
     //     let newGrid = this.state.grid.slice()
