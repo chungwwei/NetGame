@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FloodTubes } from '../game/FloodTube';
 import { CellComponent } from './CellComponent';
+import HudComponent from './HudComponent';
 
 export interface FloodTubeProps {
   game: FloodTubes
@@ -42,7 +43,7 @@ export default class FloodTubeComponent extends React.Component<FloodTubeProps, 
   }
 
   runBFS() {
-    let newPath = this.props.game.BFS()
+    let newPath = this.props.game.wrappingBFS()
     this.animatePath(newPath)
     // for (let i = 0; i < newPath.length; i ++) {
     //   setTimeout(()=>{
@@ -62,6 +63,7 @@ export default class FloodTubeComponent extends React.Component<FloodTubeProps, 
     return (
       <div>
           <h1>Flood Tube</h1>
+          <HudComponent></HudComponent>
           <div className="pipe_board center">
           <div className='grid_container'>
             {

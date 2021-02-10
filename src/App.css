@@ -161,3 +161,10 @@
     background-color: rgb(255, 254, 106);
   }
 }
+
+
+.hud {
+  display: flex;
+  justify-content: center;
+
+}

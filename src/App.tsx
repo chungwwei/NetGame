@@ -13,7 +13,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h3>hello</h3>
-        <BoardComponent game={light_off}></BoardComponent>
+        {/* <BoardComponent game={light_off}></BoardComponent> */}
         <FloodTubeComponent game={flood_tube}></FloodTubeComponent>
       </header>
     </div>

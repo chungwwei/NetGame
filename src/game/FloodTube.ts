@@ -61,6 +61,9 @@ export class FloodTubes {
         this.board[1][5].type = 'i0'
         this.board[0][5].type = 't2'
         this.board[0][6].type = 'i1'
+        this.board[2][0].type = 'i1'
+        this.board[2][9].type = 'i1'
+        this.board[2][8].type = 't1'
 
 
         
@@ -100,6 +103,50 @@ export class FloodTubes {
         }
         return false
         
+    }
+
+    public wrappingBFS() {
+        let seen: boolean[][] = []
+        for (let i = 0; i < this.R; i ++) {
+            seen.push([])
+            for (let j = 0; j < this.C; j ++) {
+                seen[i].push(false)
+            }
+        }
+
+        let layer = []
+        // <i, j, distance, type>
+        let q: any[][] = [[2, 3, 0, 'start']]
+        q.push([1, 1, 0, 'start'])
+        seen[2][3] = true
+        seen[1][1] = true
+        while (q.length != 0) {
+            let front = q.shift()
+            let [i, j, d, type] = front!
+            let size = q.length
+            let dirs = this.dirs.get(type)
+            if (type === 'end') return layer
+            for (const [dx, dy] of dirs!) {
+                let ni = (i + dx + this.R) % this.R
+                let nj = (j + dy + this.C) % this.C
+                if (this.isWithinBound(ni, nj)) {
+                    let p = this.board[ni][nj].type
+                    let reverseDirs = this.dirs.get(p)!
+                    console.log(ni + " " + nj + " ", p)
+                    if ((!seen[ni][nj]) && 
+                        (this.board[ni][nj].type !== 'blank') &&
+                        (this.isCompatible(dx, dy, reverseDirs))) {
+                            q.push([ni, nj, d + 1, this.board[ni][nj].type])
+                            layer.push([ni, nj])
+                            seen[ni][nj] = true
+
+                            this.board[ni][nj].isPartPath = true
+                    }
+                }
+            }
+        }
+        console.log(layer)
+        return layer
     }
 
     public BFS() {
