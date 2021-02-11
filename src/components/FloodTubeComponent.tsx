@@ -1,10 +1,12 @@
+import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { FloodTubes } from '../game/FloodTube';
 import { CellComponent } from './CellComponent';
-import HudComponent from './HudComponent';
+import {HudComponent} from './HudComponent'
 
 export interface FloodTubeProps {
   game: FloodTubes
+  selectedLevel: string
 }
 
 export interface FloodTubeState { 
@@ -25,14 +27,13 @@ export default class FloodTubeComponent extends React.Component<FloodTubeProps, 
 
   handleClick(i: number, j: number, type: string) {
 
-    console.log('mouseCLICKCKCJKVJK')
     this.props.game.rotate(i, j, type)
-
     this.setState({refresh: !this.state.refresh})
 
   }
 
   animatePath(path: number[][]) {
+    console.log('animating path')
     for (let i = 0; i < path.length; i++) {
       setTimeout(() => {
         const node = path[i];
@@ -43,27 +44,33 @@ export default class FloodTubeComponent extends React.Component<FloodTubeProps, 
   }
 
   runBFS() {
-    let newPath = this.props.game.wrappingBFS()
-    this.animatePath(newPath)
-    // for (let i = 0; i < newPath.length; i ++) {
-    //   setTimeout(()=>{
-    //     let newGrid = this.state.grid.slice()
-    //     this.setState({
-    //       path: newPath
-    //     })
-    //   }, 1000 * i)
-    // }
+    let str: string = this.props.selectedLevel
+    const lst: string[] = str.split(' ')
+    const category: string = lst[0]
+    const index: number = +lst[1]
+    if (category === 'classic') {
+
+    } else if(category === 'wrapping') {
+      let newPath = this.props.game.wrappingBFS()
+      this.animatePath(newPath)
+    }
   }
+
+
 
 
   public render() {
     let board = this.props.game.getBoard()
-    // let board = this.state
-    console.log(board)
     return (
       <div>
-          <h1>Flood Tube</h1>
-          <HudComponent></HudComponent>
+          {/* <HudComponent
+            flow={() => this.runBFS()}
+            loadLevel={(level: string[][])=>this.loadLevel(level)}
+            game={this.props.game}
+            levels={this.props.game.getLevels()}
+
+          ></HudComponent> */}
+          <Button onClick={()=>this.runBFS()}> FLOW </Button>
           <div className="pipe_board center">
           <div className='grid_container'>
             {
@@ -88,7 +95,6 @@ export default class FloodTubeComponent extends React.Component<FloodTubeProps, 
             }
           </div>
         </div>
-        <button onClick={()=>this.runBFS()}>RUN BFS</button>
       </div>
     );
   }

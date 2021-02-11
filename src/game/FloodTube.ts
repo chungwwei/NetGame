@@ -1,5 +1,7 @@
 import { stringify } from "querystring"
 import { Cell } from "./Cell"
+import { LevelManager } from "./LevelManager"
+
 
 
 
@@ -26,7 +28,13 @@ export class FloodTubes {
 
     private dirs: Map<string, number[][]>
 
+    private levelManager: LevelManager
+    private levels: Map<string, string[][][]>
+
     constructor(row: number, col: number) {
+
+        this.levelManager = new LevelManager()
+        this.levels = this.levelManager.levels
 
         // init board
         this.board = []
@@ -39,33 +47,6 @@ export class FloodTubes {
                 this.board[i].push(node)
             }
         }
-
-        this.board[2][3].type = 'start'
-        this.board[1][1].type = 'start'
-        this.board[6][6].type = 'finish'
-        this.board[2][1].type = 'd3'
-        this.board[8][1].type = 't3'
-        this.board[8][6].type = 't2'
-        this.board[7][6].type = 't2'
-        this.board[8][4].type = 't2'
-        this.board[7][7].type = '4ways'
-        this.board[3][3].type = 'i0'
-        this.board[4][3].type = 'i0'
-        this.board[1][3].type = 'i0'
-        this.board[5][3].type = 'i0'
-        this.board[3][1].type = 't1'
-        this.board[2][4].type = '4ways'
-        this.board[3][4].type = '4ways'
-        this.board[2][5].type = 't3'
-        this.board[3][5].type = 'd0'
-        this.board[1][5].type = 'i0'
-        this.board[0][5].type = 't2'
-        this.board[0][6].type = 'i1'
-        this.board[2][0].type = 'i1'
-        this.board[2][9].type = 'i1'
-        this.board[2][8].type = 't1'
-
-
         
         // set dirs
         this.dirs = new Map()
@@ -107,19 +88,19 @@ export class FloodTubes {
 
     public wrappingBFS() {
         let seen: boolean[][] = []
+        let q: any[][] = []        // <i, j, distance, type>
         for (let i = 0; i < this.R; i ++) {
             seen.push([])
             for (let j = 0; j < this.C; j ++) {
                 seen[i].push(false)
+                if (this.board[i][j].type === 'start') {
+                    seen[i][j] = true
+                    q.push([i, j, 0, 'start'])
+                }
             }
         }
 
         let layer = []
-        // <i, j, distance, type>
-        let q: any[][] = [[2, 3, 0, 'start']]
-        q.push([1, 1, 0, 'start'])
-        seen[2][3] = true
-        seen[1][1] = true
         while (q.length != 0) {
             let front = q.shift()
             let [i, j, d, type] = front!
@@ -151,19 +132,19 @@ export class FloodTubes {
 
     public BFS() {
         let seen: boolean[][] = []
+        let q: any[][] = []        // <i, j, distance, type>
         for (let i = 0; i < this.R; i ++) {
             seen.push([])
             for (let j = 0; j < this.C; j ++) {
                 seen[i].push(false)
+                if (this.board[i][j].type === 'start') {
+                    seen[i][j] = true
+                    q.push([i, j, 0, 'start'])
+                }
             }
         }
 
         let layer = []
-        // <i, j, distance, type>
-        let q: any[][] = [[2, 3, 0, 'start']]
-        q.push([1, 1, 0, 'start'])
-        seen[2][3] = true
-        seen[1][1] = true
         while (q.length != 0) {
             let front = q.shift()
             let [i, j, d, type] = front!
@@ -176,7 +157,6 @@ export class FloodTubes {
                 if (this.isWithinBound(ni, nj)) {
                     let p = this.board[ni][nj].type
                     let reverseDirs = this.dirs.get(p)!
-                    console.log(ni + " " + nj + " ", p)
                     if ((!seen[ni][nj]) && 
                         (this.board[ni][nj].type !== 'blank') &&
                         (this.isCompatible(dx, dy, reverseDirs))) {
@@ -206,11 +186,13 @@ export class FloodTubes {
         if (type === 'i') newIndex = (curIndex + 1) % 2
         if (type === 't' || type === 'd') newIndex = (curIndex + 1) % 4
         // this.board[r][c] = [type, newIndex]
+        
+        let old: Cell[][] = [...this.getBoard()]
 
         // change the type
         let cell = this.board[r][c]
-        console.log(type + newIndex + '')
-        console.log(cell)
+        // console.log(type + newIndex + '')
+        // console.log(cell)
         cell.type = type + newIndex + ''
         
     }
@@ -233,7 +215,16 @@ export class FloodTubes {
         return false
     }
 
+    public setBoard(newBoard: Cell[][]) {
+        this.board = newBoard
+    }
+
     public getBoard() {
         return this.board
     }
+
+    public getLevels() {
+        return this.levels
+    }
+
 }

@@ -5,16 +5,17 @@ import BoardComponent from './components/BoardComponent';
 import { LightOff } from './game/LightOff';
 import FloodTubeComponent from './components/FloodTubeComponent';
 import { FloodTubes } from './game/FloodTube';
+import { HudComponent } from './components/HudComponent';
 
 function App() {
-  var light_off = new LightOff(5, 5)
+  // var light_off = new LightOff(5, 5)
   var flood_tube = new FloodTubes(10, 10)
   return (
     <div className="App">
       <header className="App-header">
-        <h3>hello</h3>
         {/* <BoardComponent game={light_off}></BoardComponent> */}
-        <FloodTubeComponent game={flood_tube}></FloodTubeComponent>
+        {/* <FloodTubeComponent game={flood_tube}></FloodTubeComponent> */}
+        <HudComponent game={flood_tube}></HudComponent>
       </header>
     </div>
   );
