@@ -3,6 +3,7 @@ import { Button, Typography, FormControl, InputLabel, Select, } from '@material-
 import { FloodTubes } from '../game/FloodTube';
 import FloodTubeComponent from './FloodTubeComponent';
 import { Cell } from '../game/Cell';
+import { CommandManager } from '../ds/CommandManager';
 
 
 interface HudProps {
@@ -81,15 +82,35 @@ export class HudComponent extends React.Component<HudProps, HudState> {
     }
 
     handleUndoClick() {
-        console.log('undoing')
+        let commandManager: CommandManager = this.props.game.getCommandManager()
+        commandManager.undo()
 
         this.setState({
             refresh: !this.state.refresh
         }) 
-
     }
 
     handleRedoClick() {
+        console.log('redoing')
+        let commandManager: CommandManager = this.props.game.getCommandManager()
+        console.log(commandManager.redoStk)
+        commandManager.redo()
+
+        this.setState({
+            refresh: !this.state.refresh
+        }) 
+    }
+
+    handleSolveClick() {
+        let game = this.props.game
+        game.solveBoard()
+        if (game.getSolutionBoard() !== undefined) {
+            game.setBoard(game.getSolutionBoard()!)
+            // console.log(game.getBoard())
+        }
+        this.setState({
+            refresh: !this.state.refresh
+        }) 
 
     }
     
@@ -98,7 +119,6 @@ export class HudComponent extends React.Component<HudProps, HudState> {
             game,
         } = this.props
         let levels: Map<string, string[][][]> = game.getLevels()
-        console.log([...levels.keys()])
         return (
             <div>
                 <h1>Flood Tubes</h1>
@@ -130,6 +150,7 @@ export class HudComponent extends React.Component<HudProps, HudState> {
                     <Button onClick={()=>{this.handleReset()}}> reset </Button>
                     <Button onClick={()=>{this.handleUndoClick()}}> undo </Button>
                     <Button onClick={()=>{this.handleRedoClick()}}> redo </Button>
+                    <Button onClick={()=>{this.handleSolveClick()}}> solve </Button>
                 </div>
                 <div>
                     <FloodTubeComponent 

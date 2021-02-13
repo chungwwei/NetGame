@@ -49,10 +49,12 @@ export default class FloodTubeComponent extends React.Component<FloodTubeProps, 
     const category: string = lst[0]
     const index: number = +lst[1]
     if (category === 'classic') {
+      let p = this.props.game.BFS()
+      this.animatePath(p)
 
     } else if(category === 'wrapping') {
-      let newPath = this.props.game.wrappingBFS()
-      this.animatePath(newPath)
+      let p = this.props.game.wrappingBFS()
+      this.animatePath(p)
     }
   }
 

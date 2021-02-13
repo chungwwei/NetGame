@@ -19,6 +19,16 @@ export class Cell {
         this.isPartPath = isPartPath
 
         this.imgSrc = '/src/i0.png'
+    }
 
+    public deepCopy() {
+        return new Cell(
+            this.i,
+            this.j,
+            this.type,
+            this.isStart,
+            this.isFinish,
+            this.isPartPath
+        )
     }
 }
