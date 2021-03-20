@@ -67,7 +67,7 @@ export class HudComponent extends React.Component<HudProps, HudState> {
         for (let i = 0; i < board.length; i ++) {
             for (let j = 0; j < board[i].length; j ++) {
                 board[i][j].type = newBoard[i][j]
-                
+                board[i][j].isPartPath = false
             }
         }
 
@@ -103,14 +103,18 @@ export class HudComponent extends React.Component<HudProps, HudState> {
 
     handleSolveClick() {
         let game = this.props.game
-        game.solveBoard()
-        if (game.getSolutionBoard() !== undefined) {
-            game.setBoard(game.getSolutionBoard()!)
-            // console.log(game.getBoard())
-        }
-        this.setState({
-            refresh: !this.state.refresh
-        }) 
+        // let category = this.state.selectedLevel.split(' ')[0]
+        // game.solveBoard(category)
+        // if (game.getSolutionBoard() !== undefined) {
+        //     game.setBoard(game.getSolutionBoard()!)
+        //     // console.log(game.getBoard())
+        // }
+        // this.setState({
+        //     refresh: !this.state.refresh
+        // }) 
+        console.log('solve click')
+        game.minBFS()
+
 
     }
     
@@ -147,10 +151,10 @@ export class HudComponent extends React.Component<HudProps, HudState> {
                             </optgroup> */}
                         </Select>
                     </FormControl>
-                    <Button onClick={()=>{this.handleReset()}}> reset </Button>
-                    <Button onClick={()=>{this.handleUndoClick()}}> undo </Button>
-                    <Button onClick={()=>{this.handleRedoClick()}}> redo </Button>
-                    <Button onClick={()=>{this.handleSolveClick()}}> solve </Button>
+                    <Button variant="outlined" color='primary' onClick={()=>{this.handleReset()}}> reset </Button>
+                    <Button variant="outlined" color='primary' onClick={()=>{this.handleUndoClick()}}> undo </Button>
+                    <Button variant="outlined" color='primary' onClick={()=>{this.handleRedoClick()}}> redo </Button>
+                    <Button variant="outlined" color='primary' onClick={()=>{this.handleSolveClick()}}> solve </Button>
                 </div>
                 <div>
                     <FloodTubeComponent 
