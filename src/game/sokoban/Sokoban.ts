@@ -2,6 +2,7 @@ import { dirxml } from "console"
 import { stringify } from "querystring"
 import { CommandManager } from "../../ds/CommandManager"
 import { RotateCommand } from "../../ds/RotateCommand"
+import { SokobanMoveCommand } from "../../ds/SokobanMoveCommand"
 import { Cell } from "../Cell"
 import { LevelManager } from "../LevelManager"
 import { Player } from "./player"
@@ -65,6 +66,11 @@ export class Sokoban {
         this.player = new Player(5, 5)
         this.board[5][5].setIsPlayer(true)
         this.board[6][5].setIsBox(true)
+        this.board[4][4].setIsBox(true)
+
+
+        let command: SokobanMoveCommand = new SokobanMoveCommand(this, this.getBoard(), this.player)
+        this.commandManager.execute(command)
     }
 
     public canMove(dir: string) {
@@ -138,9 +144,16 @@ export class Sokoban {
         this.board[newBoxX][newBoxY].setIsBox(true)
     }
 
-    
-        
+    public undo() {
+        this.commandManager.undo()
 
+    }
+
+    public redo() {
+        this.commandManager.redo()
+    }
+
+    
     public isWithinBound(i: number, j: number) {
         if (i >= 0 && i < this.R && j >= 0 && j < this.C)
             return true
@@ -161,6 +174,14 @@ export class Sokoban {
 
     public getCommandManager(): CommandManager {
         return this.commandManager
+    }
+
+    public getPlayer() {
+        return this.player
+    }
+
+    public setPlayer(player: Player) {
+        this.player = player
     }
 
 }

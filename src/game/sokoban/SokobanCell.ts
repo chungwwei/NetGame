@@ -2,7 +2,7 @@ export class SokobanCell {
     private i: number
     private j: number
     public type: string
-    public imgSrc: string
+
     private isPlayer: boolean
     private isBox: boolean
 
@@ -11,7 +11,7 @@ export class SokobanCell {
         this.i = i
         this.j = j
         this.type = type 
-        this.imgSrc = '/src/i0.png'
+
         
         this.isPlayer = isPlayer
         this.isBox = isBox
@@ -36,6 +36,13 @@ export class SokobanCell {
         this.isBox = bool
     }
 
+    public setI(i: number) { this.i = i }
+    public setJ(j: number) { this.j = j }
+    public setType(type: string) { this.type = type }
+
     public getIsPlayer() { return this.isPlayer }
     public getIsBox() { return this.isBox }
+    public getI() { return this.i }
+    public getJ() { return this.j }
+    public getType() { return this. type }
 }

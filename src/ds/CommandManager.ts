@@ -17,6 +17,7 @@ export class CommandManager {
     public undo() {
         if (this.undoStk.length > 0) {
             let last = this.undoStk.pop()!
+            // execute the current top of stk after the lastest is popped
             last.undo()
             this.redoStk.push(last)
         }
