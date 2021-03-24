@@ -7,6 +7,8 @@ import { Cell } from "../Cell"
 import { LevelManager } from "../LevelManager"
 import { Player } from "./player"
 import { SokobanCell } from "./SokobanCell"
+import { SokobanLevel } from "./SokobanLevel"
+import { SokobanLevelManager } from "./SokobanLevelManager"
 
 export class Sokoban {
     
@@ -14,9 +16,9 @@ export class Sokoban {
     private R: number
     private C: number
 
-    private levelManager: LevelManager
+    private levelManager: SokobanLevelManager
     private commandManager: CommandManager
-    private levels: Map<string, string[][][]>
+    private levels: Map<string, SokobanLevel>
 
     private dirs: Map<string, number[]>
     private player: Player
@@ -28,28 +30,14 @@ export class Sokoban {
     constructor(row: number, col: number) {
 
         this.commandManager = new CommandManager()
-        this.levelManager = new LevelManager()
-        this.levels = this.levelManager.levels
+        this.levelManager = new SokobanLevelManager()
+        this.levels = this.levelManager.getLevels()
 
         this.dirs = new Map()
         this.dirs.set("w", [-1, 0])
         this.dirs.set("s", [1, 0])
         this.dirs.set("a", [0, -1])
         this.dirs.set("d", [0, 1])
-
-        let temp = 
-        [
-            ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
-            ['w', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'w'],
-            ['w', 'w', 'g', 'g', 'g', 'g', 'e', 'g', 'g', 'w'],
-            ['w', 'w', 'g', 'g', 'g', 'w', 'w', 'g', 'g', 'w'],
-            ['w', 'w', 'g', 'g', 'g', 'e', 'e', 'g', 'w', 'w'],
-            ['w', 'w', 'g', 'g', 'g', 'g', 'w', 'g', 'g', 'w'],
-            ['w', 'w', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'w'],
-            ['w', 'w', 'w', 'g', 'g', 'e', 'w', 'w', 'w', 'w'],
-            ['w', 'w', 'w', 'g', 'g', 'g', 'g', 'g', 'g', 'w'],
-            ['w', 'e', 'e', 'g', 'w', 'w', 'w', 'w', 'w', 'w']
-        ]
 
         // init board
         this.board = []
@@ -58,19 +46,40 @@ export class Sokoban {
         for (let i = 0; i < row; i ++) {
             this.board[i] = []
             for (let j = 0; j < col; j ++) {
-                let node = new SokobanCell(i, j, temp[i][j], false, false)
+                let node = new SokobanCell(i, j, 'g', false, false)
                 this.board[i].push(node)
             }
         }
-
-        this.player = new Player(5, 5)
-        this.board[5][5].setIsPlayer(true)
-        this.board[6][5].setIsBox(true)
-        this.board[4][4].setIsBox(true)
-
+        this.player = new Player(0, 0)
 
         let command: SokobanMoveCommand = new SokobanMoveCommand(this, this.getBoard(), this.player)
         this.commandManager.execute(command)
+    }
+
+    public loadLevel(requestedLevel: string) {
+        
+        let level: SokobanLevel = this.levelManager.getLevel(requestedLevel)!
+        let base = level.getBaseLayer()
+        let boxesPos = level.getBoxesPos()
+        let playerPos = level.getPlayerPos()
+        
+        for (let i = 0; i < this.board.length; i ++) {
+            for (let j = 0; j < this.board[i].length; j ++) {
+                this.board[i][j] = new SokobanCell(i, j, base[i][j], false, false)
+            }
+        }
+
+        for (let i = 0; i < boxesPos.length; i ++) {
+            let r = boxesPos[i][0]
+            let c = boxesPos[i][1]
+            this.board[r][c].setIsBox(true)
+        }
+
+        let playerX = playerPos[0][0]
+        let playerY = playerPos[0][1]
+        this.player.setX(playerX)
+        this.player.setY(playerY)
+        this.board[playerX][playerY].setIsPlayer(true)
     }
 
     public canMove(dir: string) {

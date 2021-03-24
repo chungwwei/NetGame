@@ -1,17 +1,18 @@
-import { Button } from '@material-ui/core';
+import { Button, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { request } from 'http';
 import * as React from 'react';
 import { SokobanMoveCommand } from '../ds/SokobanMoveCommand';
 import { FloodTubes } from '../game/FloodTube';
 import { Sokoban } from '../game/sokoban/Sokoban';
 import { CellComponent } from './CellComponent';
-import {HudComponent} from './HudComponent'
+import { HudComponent } from './HudComponent'
 import { SokobanCellComponent } from './SokobanCellComponent';
 
 export interface SokobanProps {
   game: Sokoban
 }
 
-export interface SokobanState { 
+export interface SokobanState {
   refresh: boolean
 
 }
@@ -28,30 +29,30 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
   }
 
   handleKeys(event: React.KeyboardEvent<HTMLDivElement>) {
-      let code = event.key
-      console.log(code)
-      let respond = this.props.game.canMove(code)
-      let movable: boolean = respond[0]
-      let withBox: boolean = respond[1]
-      let game = this.props.game
-      if (movable) {
-        if (withBox) {
-          console.log('move box')
-          this.props.game.moveBox(code)
-        } else {
-          console.log('move player')
-          this.props.game.movePlayer(code)
-        }
-
-        //
-        let manager = game.getCommandManager()
-        let command: SokobanMoveCommand = new SokobanMoveCommand(game, game.getBoard(), game.getPlayer())
-        manager.execute(command)
-        console.log(manager.undoStk)
-        this.setState({
-          refresh: !this.state.refresh
-        })
+    let code = event.key
+    console.log(code)
+    let respond = this.props.game.canMove(code)
+    let movable: boolean = respond[0]
+    let withBox: boolean = respond[1]
+    let game = this.props.game
+    if (movable) {
+      if (withBox) {
+        console.log('move box')
+        this.props.game.moveBox(code)
+      } else {
+        console.log('move player')
+        this.props.game.movePlayer(code)
       }
+
+      //
+      let manager = game.getCommandManager()
+      let command: SokobanMoveCommand = new SokobanMoveCommand(game, game.getBoard(), game.getPlayer())
+      manager.execute(command)
+      console.log(manager.undoStk)
+      this.setState({
+        refresh: !this.state.refresh
+      })
+    }
 
     //   if(code === 'a') {
     //     // this.move("LEFT")
@@ -65,7 +66,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     //   }
   }
 
-  handleRedo() {
+  handleRedoClick() {
     let game = this.props.game
     game.redo()
     this.setState({
@@ -73,7 +74,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     })
   }
 
-  handleUndo() {
+  handleUndoClick() {
     console.log("undo is clicked")
     let game = this.props.game
     game.undo()
@@ -83,20 +84,45 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     })
   }
 
+  handleSolveClick() {
+    throw new Error('Method not implemented.');
+  }
+  handleReset() {
+    throw new Error('Method not implemented.');
+  }
+
+  handleChange(event: React.ChangeEvent<{ value: string }>) {
+    alert(event.target.value)
+    let requestedLevel: string = event.target.value
+    this.props.game.loadLevel(requestedLevel)
+    this.setState({
+      refresh: !this.state.refresh
+    })
+  }
   public render() {
     let board = this.props.game.getBoard()
     return (
       <div>
-          {/* <HudComponent
+        {/* <HudComponent
             flow={() => this.runBFS()}
             loadLevel={(level: string[][])=>this.loadLevel(level)}
             game={this.props.game}
             levels={this.props.game.getLevels()}
 
           ></HudComponent> */}
-        <Button variant="outlined" color='primary' onClick={()=>this.handleUndo()}> undo </Button>
-        <Button variant="outlined" color='primary' onClick={()=>this.handleRedo()}> redo </Button>
-          <div className="pipe_board center" tabIndex={0} onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>)=>this.handleKeys(e)}>
+        <div className='hud'>
+          <InputLabel id="label">Levels</InputLabel>
+          <Select labelId="label" id="select" onChange={(e: any)=>this.handleChange(e)}>
+            <MenuItem value="1"> 1 </MenuItem>
+            <MenuItem value="2"> 2 </MenuItem>
+            <MenuItem value="3"> 3 </MenuItem>
+          </Select>
+          <Button variant="outlined" color='primary' onClick={() => { this.handleReset() }}> reset </Button>
+          <Button variant="outlined" color='primary' onClick={() => { this.handleUndoClick() }}> undo </Button>
+          <Button variant="outlined" color='primary' onClick={() => { this.handleRedoClick() }}> redo </Button>
+          <Button variant="outlined" color='primary' onClick={() => { this.handleSolveClick() }}> solve </Button>
+        </div>
+        <div className="pipe_board center" tabIndex={0} onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => this.handleKeys(e)}>
           <div className='grid_container'>
             {
               board.map((lst, i) => (
@@ -107,7 +133,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
                       j={j}
                       type={item.type}
                       imgSrc={item.type}
-                      onClick={(i: number, j: number, type: string) => {}}
+                      onClick={(i: number, j: number, type: string) => { }}
                       isPlayer={item.getIsPlayer()}
                       isBox={item.getIsBox()}
                     ></SokobanCellComponent>
