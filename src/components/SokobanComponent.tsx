@@ -84,15 +84,16 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     })
   }
 
-  handleSolveClick() {
-    throw new Error('Method not implemented.');
-  }
   handleReset() {
-    throw new Error('Method not implemented.');
+    let manager = this.props.game.getLevelManger()
+    let curLevel = manager.getCurLevel()
+    this.props.game.loadLevel(curLevel)
+    this.setState({
+      refresh: !this.state.refresh
+    })
   }
 
   handleChange(event: React.ChangeEvent<{ value: string }>) {
-    alert(event.target.value)
     let requestedLevel: string = event.target.value
     this.props.game.loadLevel(requestedLevel)
     this.setState({
@@ -120,7 +121,6 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
           <Button variant="outlined" color='primary' onClick={() => { this.handleReset() }}> reset </Button>
           <Button variant="outlined" color='primary' onClick={() => { this.handleUndoClick() }}> undo </Button>
           <Button variant="outlined" color='primary' onClick={() => { this.handleRedoClick() }}> redo </Button>
-          <Button variant="outlined" color='primary' onClick={() => { this.handleSolveClick() }}> solve </Button>
         </div>
         <div className="pipe_board center" tabIndex={0} onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => this.handleKeys(e)}>
           <div className='grid_container'>

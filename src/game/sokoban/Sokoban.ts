@@ -59,6 +59,9 @@ export class Sokoban {
     public loadLevel(requestedLevel: string) {
         
         let level: SokobanLevel = this.levelManager.getLevel(requestedLevel)!
+        if (level === undefined || level === null) return
+
+        this.levelManager.setCurLevel(requestedLevel)
         let base = level.getBaseLayer()
         let boxesPos = level.getBoxesPos()
         let playerPos = level.getPlayerPos()
@@ -183,6 +186,10 @@ export class Sokoban {
 
     public getCommandManager(): CommandManager {
         return this.commandManager
+    }
+
+    public getLevelManger() {
+        return this.levelManager
     }
 
     public getPlayer() {
