@@ -1,5 +1,6 @@
 import { dirxml } from "console"
 import { stringify } from "querystring"
+import { HighlightSpanKind } from "typescript"
 import { CommandManager } from "../../ds/CommandManager"
 import { RotateCommand } from "../../ds/RotateCommand"
 import { SokobanMoveCommand } from "../../ds/SokobanMoveCommand"
@@ -23,12 +24,12 @@ export class Sokoban {
     private dirs: Map<string, number[]>
     private player: Player
 
-
+    private numberOfBoxes: number
     // private playerCoord: [number, number]
 
 
     constructor(row: number, col: number) {
-
+        this.numberOfBoxes = -1
         this.commandManager = new CommandManager()
         this.levelManager = new SokobanLevelManager()
         this.levels = this.levelManager.getLevels()
@@ -65,6 +66,8 @@ export class Sokoban {
         let base = level.getBaseLayer()
         let boxesPos = level.getBoxesPos()
         let playerPos = level.getPlayerPos()
+
+        this.numberOfBoxes = level.getNumBoxes()
         
         for (let i = 0; i < this.board.length; i ++) {
             for (let j = 0; j < this.board[i].length; j ++) {
@@ -154,6 +157,21 @@ export class Sokoban {
         let newBoxY = curPlayerY + 2 * dy
         this.board[newPlayerX][newPlayerY].setIsBox(false)
         this.board[newBoxX][newBoxY].setIsBox(true)
+    }
+
+    public hasWon(): boolean {
+        var cnt = 0
+        for (let i = 0; i < this.board.length; i ++) {
+            for (let j = 0; j < this.board[i].length; j ++) {
+                let cell = this.board[i][j]
+                let isBox = cell.getIsBox()
+                let type = cell.getType()
+                if (type === 'e' && isBox === true) {
+                    cnt += 1
+                }
+            }
+        }
+        return cnt === this.numberOfBoxes
     }
 
     public undo() {

@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { Button, FormControl, InputLabel, MenuItem, Select, Snackbar} from '@material-ui/core';
 import { request } from 'http';
 import * as React from 'react';
 import { SokobanMoveCommand } from '../ds/SokobanMoveCommand';
@@ -8,12 +8,15 @@ import { CellComponent } from './CellComponent';
 import { HudComponent } from './HudComponent'
 import { SokobanCellComponent } from './SokobanCellComponent';
 
+
 export interface SokobanProps {
   game: Sokoban
 }
 
 export interface SokobanState {
   refresh: boolean
+  moves: number
+  won: boolean
 
 }
 
@@ -24,7 +27,9 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     this.state = {
       // path: [],
       // grid: this.props.game.getBoard(),
-      refresh: false
+      moves: 0,
+      refresh: false,
+      won: false,
     }
   }
 
@@ -39,6 +44,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
       if (withBox) {
         console.log('move box')
         this.props.game.moveBox(code)
+
       } else {
         console.log('move player')
         this.props.game.movePlayer(code)
@@ -49,8 +55,12 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
       let command: SokobanMoveCommand = new SokobanMoveCommand(game, game.getBoard(), game.getPlayer())
       manager.execute(command)
       console.log(manager.undoStk)
+
+      let hasWon = this.props.game.hasWon()
       this.setState({
-        refresh: !this.state.refresh
+        moves: this.state.moves + 1,
+        refresh: !this.state.refresh,
+        won: hasWon
       })
     }
 
@@ -89,6 +99,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     let curLevel = manager.getCurLevel()
     this.props.game.loadLevel(curLevel)
     this.setState({
+      moves: 0,
       refresh: !this.state.refresh
     })
   }
@@ -97,6 +108,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     let requestedLevel: string = event.target.value
     this.props.game.loadLevel(requestedLevel)
     this.setState({
+      moves: 0,
       refresh: !this.state.refresh
     })
   }
@@ -111,6 +123,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
             levels={this.props.game.getLevels()}
 
           ></HudComponent> */}
+        <h1>Sokoban</h1>
         <div className='hud'>
           <InputLabel id="label">Levels</InputLabel>
           <Select labelId="label" id="select" onChange={(e: any)=>this.handleChange(e)}>
@@ -121,6 +134,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
           <Button variant="outlined" color='primary' onClick={() => { this.handleReset() }}> reset </Button>
           <Button variant="outlined" color='primary' onClick={() => { this.handleUndoClick() }}> undo </Button>
           <Button variant="outlined" color='primary' onClick={() => { this.handleRedoClick() }}> redo </Button>
+          <h1>Moves: {this.state.moves}</h1>
         </div>
         <div className="pipe_board center" tabIndex={0} onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => this.handleKeys(e)}>
           <div className='grid_container'>
@@ -145,6 +159,13 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
             }
           </div>
         </div>
+        <Snackbar
+          anchorOrigin={{vertical: 'bottom', horizontal:'left'}}
+          autoHideDuration={1000}
+          message="The level is cleared"
+          open={this.state.won}
+          onClose={()=>{}}
+        />
       </div>
     );
   }

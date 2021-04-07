@@ -32,6 +32,8 @@ export class SokobanLevelManager {
         [
             [5, 5]
         ]
+        ,
+            2
         )
 
         let level2 = new SokobanLevel(
@@ -54,7 +56,8 @@ export class SokobanLevelManager {
         ],
         [
             [5, 5]
-        ]
+        ],
+            2
         )
 
 
@@ -78,7 +81,8 @@ export class SokobanLevelManager {
         ],
         [
             [6, 5]
-        ]
+        ],
+            2
         )
 
         this.levels.set('1', level1)

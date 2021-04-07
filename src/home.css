@@ -1,0 +1,13 @@
+.home__cards {
+    display: flex;
+    justify-content: center;
+}
+
+.home--card {
+    margin: 10px;
+}
+
+.home--card--content {
+    background-color: rgb(81, 218, 218);
+}
+

@@ -4,12 +4,14 @@ export class SokobanLevel {
     private baseLayer: string[][]
     private boxesPos: number[][]
     private playerPos: number[][]
+    private numBoxes: number
 
-    constructor(levelName: string, baseLayer: string[][], boxesPos: number[][], playerPos: number[][]) {
+    constructor(levelName: string, baseLayer: string[][], boxesPos: number[][], playerPos: number[][], numBoxes: number) {
         this.levelName = levelName
         this.baseLayer = baseLayer
         this.boxesPos = boxesPos
         this.playerPos = playerPos
+        this.numBoxes = numBoxes
     }
 
     public setBaseLayer(layer: string[][]) { this.baseLayer = layer }
@@ -20,5 +22,6 @@ export class SokobanLevel {
     public getBoxesPos() { return this.boxesPos }
     public getPlayerPos() { return this.playerPos }
     public getLevelName() { return this.levelName }
+    public getNumBoxes() { return this.numBoxes }
 
 }

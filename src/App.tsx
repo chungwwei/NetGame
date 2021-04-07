@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import './home.css';
 import BoardComponent from './components/BoardComponent';
 import { LightOff } from './game/LightOff';
 import FloodTubeComponent from './components/FloodTubeComponent';
@@ -16,45 +17,46 @@ function App() {
   var flood_tube = new FloodTubes(10, 10)
   var sokoban = new Sokoban(10, 10)
   return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          {/* <SokobanComponent game={sokoban}></SokobanComponent> */}
-          {/* <BoardComponent game={light_off}></BoardComponent> */}
-          {/* <FloodTubeComponent game={flood_tube}></FloodTubeComponent> */}
+    // for deployment purposec
+    <div className='App'>
+      <Router basename={process.env.PUBLIC_URL}>
+          <h1>HOME</h1>
+          {/* <header className="App-header">
+          </header> */}
           <Switch>
-            <Route path="/" exact> 
-              <h1>HOME</h1>
-            </Route> 
-            <Route path="/sokoban" exact>
-              <SokobanComponent game={sokoban}></SokobanComponent>
-            </Route> 
-            <Route exact path='/flushtubes'>
-              <HudComponent game={flood_tube}></HudComponent>   
-            </Route> 
-          </Switch>
-          <Link to='/sokoban'>
-            <Card>
-              <CardActionArea>
-                <CardContent>
-                  <h1> Sokoban </h1>
-              </CardContent>
-              </CardActionArea>
-            </Card>
-          </Link>
+            <div className='home__cards'>
+              <Route path="/" exact>
+                <Link to='/sokoban'>
+                  <Card className='home--card'>
+                    <CardActionArea>
+                      <CardContent className='home--card--content'>
+                        <h1> Sokoban </h1>
+                      </CardContent>
+                    </CardActionArea>
+                    </Card>
+                </Link>
+                <Link to='/flushtubes'>
+                  <Card className='home--card'>
+                    <CardActionArea>
+                      <CardContent className='home--card--content'>
+                        <h1> Flush Tubes [Under Development]</h1>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Link>
+              </Route>
+            </div>
 
-          <Link to='/flushtubes'>
-            <Card>
-              <CardActionArea>
-                <CardContent>
-                  <h1> Flush Tubes </h1>
-              </CardContent>
-              </CardActionArea>
-            </Card>
-          </Link>
-        </header>
-      </div>
-    </Router>
+            <Route exact path="/sokoban">
+              <SokobanComponent game={sokoban}></SokobanComponent>
+            </Route>
+            <Route exact path='/flushtubes'>
+              <HudComponent game={flood_tube}></HudComponent>
+            </Route>
+          </Switch>
+          <SokobanComponent game={sokoban}></SokobanComponent>
+      </Router>
+    </div>
   );
 }
 
