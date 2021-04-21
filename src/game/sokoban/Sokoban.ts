@@ -86,6 +86,8 @@ export class Sokoban {
         this.player.setX(playerX)
         this.player.setY(playerY)
         this.board[playerX][playerY].setIsPlayer(true)
+
+        this.commandManager = new CommandManager()
     }
 
     public canMove(dir: string) {
