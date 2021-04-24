@@ -2,6 +2,8 @@ import React from "react"
 import { Inertia } from "../../game/inertia/Inertia"
 import player from '../../images/player.png'
 import wall from '../../images/wall.png'
+import gem from '../../images/4ways.png'
+import bomb from '../../images/box.png'
 
 export const InertiaCellComponent: React.FC<InertiaCellProps> = (props) => {
     const {
@@ -42,9 +44,9 @@ export const InertiaCellComponent: React.FC<InertiaCellProps> = (props) => {
         : isBrokenCirlce
         ? 'inertia_broken_circle'
         : isGem
-        ? 'inertia_gem'
+        ? gem
         : isBomb
-        ? 'inertia_bomb'
+        ? bomb
         : isGround
         ? 'inertia_ground'
         : ''

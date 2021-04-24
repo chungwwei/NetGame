@@ -56,7 +56,6 @@ export const InertiaComponent: React.FC<InertiaProps> = props => {
 
 interface InertiaProps {
     game: Inertia
-
 }
 
 interface InertiaState {

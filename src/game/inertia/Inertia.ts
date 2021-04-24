@@ -1,7 +1,10 @@
 import { CommandManager } from "../../ds/CommandManager"
+import { InertiaMoveCommand } from "../../ds/InertiaMoveCommand"
 import { Cell } from "../Cell"
+import { LevelManager } from "../LevelManager"
 import { Player } from "../sokoban/player"
 import { InertiaCell } from "./InertiaCell"
+import { InertiaLevelManager } from "./InertiaLevelManager"
 
 export enum Directions {
     UP,
@@ -26,11 +29,13 @@ export class Inertia {
     private dirs: Map<string, number[]>
     private player: Player
     private numberOfBoxes: number
+    private levelManager: InertiaLevelManager
 
 
     constructor(row: number, col: number) {
         this.numberOfBoxes = -1
         this.commandManager = new CommandManager()
+        this.levelManager = new InertiaLevelManager()
 
         this.dirs = new Map()
         this.dirs.set("w", [-1, 0])
@@ -38,6 +43,10 @@ export class Inertia {
         this.dirs.set("a", [0, -1])
         this.dirs.set("d", [0, 1])
 
+        let startLevel = this.levelManager.getLevel('1')!
+        let layer = startLevel.getBaseLayer()
+        let playerX = startLevel.getPlayerPos()[0]
+        let playerY = startLevel.getPlayerPos()[1]
         // init board
         this.board = []
         this.R = row
@@ -45,18 +54,19 @@ export class Inertia {
         for (let i = 0; i < row; i ++) {
             this.board[i] = []
             for (let j = 0; j < col; j ++) {
-                let node = new InertiaCell(i, j, 'wall', false, false, false, false, false, true)
+                let isWall = layer[i][j] === 'w'
+                let isBrokeCircle = layer[i][j] === 'c'
+                let isGem = layer[i][j] === 'j'
+                let isBomb = layer[i][j] === 'b'
+                let isGround = layer[i][j] === 'g'
+                let isPlayer = (i === playerX && j === playerY)
+                let node = new InertiaCell(i, j, layer[i][j], isPlayer, isWall, isGem, isBrokeCircle, isBomb, isGround)
                 this.board[i].push(node)
             }
         }
-        this.player = new Player(4, 4)
-
-        this.board[4][4].setIsPlayer(true)
-        this.board[3][2].setIsWall(true)
-        this.board[3][3].setIsWall(true)
-        this.board[3][4].setIsWall(true)
-        this.board[5][5].setIsBrokenCircle(true)
-        this.board[6][6].setIsBrokenCircle(true)
+        this.player = new Player(playerX, playerY)
+        let command = new InertiaMoveCommand(this, this.getBoard(), this.player)
+        this.commandManager.execute(command)
     }
 
     public canMove(i: number, j: number): [boolean, Directions] {
@@ -143,11 +153,9 @@ export class Inertia {
         this.player.setX(i)
         this.player.setY(j)
 
-    }
-
-
-
-    public moveBox(dir: string) {
+        let command = new InertiaMoveCommand(this, this.getBoard(), this.player)
+        this.commandManager.execute(command)
+        console.log(this.commandManager.undoStk)
     }
 
     public hasWon(): boolean {
@@ -155,10 +163,15 @@ export class Inertia {
     }
 
     public undo() {
-
+        this.commandManager.undo()
     }
 
     public redo() {
+        this.commandManager.redo()
+    }
+    
+    public reset() {
+        return
     }
 
     
@@ -194,6 +207,10 @@ export class Inertia {
 
     public setPlayer(player: Player) {
         this.player = player
+    }
+
+    public toString = () : string => {
+        return this.getBoard().toString()
     }
 
 }

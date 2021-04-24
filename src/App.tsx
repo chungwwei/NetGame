@@ -21,13 +21,12 @@ function App() {
   return (
     // for deployment purposec
     <div className='App'>
-      <Router basename={process.env.PUBLIC_URL}>
-      {/* <Router> */}
+      {/* <Router basename={process.env.PUBLIC_URL}> */}
+      <Router>
         <h1>HOME</h1>
         {/* <header className="App-header">
           </header> */}
         <Switch>
-
           <Route exact path="/">
             <div className='home__cards'>
               <Link to='/sokoban'>

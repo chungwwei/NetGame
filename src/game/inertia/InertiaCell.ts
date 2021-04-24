@@ -65,4 +65,8 @@ export class InertiaCell {
     public getI() { return this.i }
     public getJ() { return this.j }
     public getType() { return this. type }
+
+    public toString = () : string => {
+        return `${this.i}, ${this.j}: ${this.isPlayer}`
+    }
 }
