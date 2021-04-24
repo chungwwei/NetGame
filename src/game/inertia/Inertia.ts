@@ -100,13 +100,14 @@ export class Inertia {
 
     public movePlayer(x: number, y: number) {
         console.log('command: move player')
-
         let temp = this.canMove(x, y)
         let [movable, dir] = temp
         if (!movable) return
 
         let playerX: number = this.player.getX()
         let playerY: number = this.player.getY()
+        if (this.board[playerX][playerY].getIsBomb()) return
+
         let i: number = playerX
         let j: number = playerY
         let dx = 0
