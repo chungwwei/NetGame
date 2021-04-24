@@ -4,6 +4,7 @@ import { Cell } from "../Cell"
 import { LevelManager } from "../LevelManager"
 import { Player } from "../sokoban/player"
 import { InertiaCell } from "./InertiaCell"
+import { InertiaLevel } from "./InertiaLevel"
 import { InertiaLevelManager } from "./InertiaLevelManager"
 
 export enum Directions {
@@ -171,9 +172,39 @@ export class Inertia {
     }
     
     public reset() {
-        return
+        let curLevel = this.levelManager.getCurLevel()
+        this.loadLevel(curLevel)
     }
 
+    public loadLevel(requestedLevel: string) {
+        
+        let level: InertiaLevel = this.levelManager.getLevel(requestedLevel)!
+        if (level === undefined || level === null) return
+
+        this.levelManager.setCurLevel(requestedLevel)
+        let layer = level.getBaseLayer()
+        let row = this.R
+        let col = this.C
+        let playerX = level.getPlayerPos()[0]
+        let playerY = level.getPlayerPos()[1]
+        for (let i = 0; i < row; i ++) {
+            this.board[i] = []
+            for (let j = 0; j < col; j ++) {
+                let isWall = layer[i][j] === 'w'
+                let isBrokeCircle = layer[i][j] === 'c'
+                let isGem = layer[i][j] === 'j'
+                let isBomb = layer[i][j] === 'b'
+                let isGround = layer[i][j] === 'g'
+                let isPlayer = (i === playerX && j === playerY)
+                let node = new InertiaCell(i, j, layer[i][j], isPlayer, isWall, isGem, isBrokeCircle, isBomb, isGround)
+                this.board[i].push(node)
+            }
+        }
+        this.commandManager = new CommandManager()
+        this.player = new Player(playerX, playerY)
+        let command = new InertiaMoveCommand(this, this.getBoard(), this.player)
+        this.commandManager.execute(command)
+    }
     
     public isWithinBound(i: number, j: number) {
         if (i >= 0 && i < this.R && j >= 0 && j < this.C)
@@ -190,7 +221,7 @@ export class Inertia {
     }
 
     public getLevels() {
-
+        return this.levelManager.getLevels()
     }
 
     public getCommandManager(): CommandManager {

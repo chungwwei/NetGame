@@ -10,7 +10,7 @@ export class InertiaLevelManager {
         this.levels = new Map()
 
         const level1 = new InertiaLevel(
-            'level1',
+            '1',
             [
                 ['g', 'g', 'c', 'j', 'j', 'g', 'c', 'j', 'w', 'g'],
                 ['g', 'g', 'j', 'g', 'j', 'g', 'g', 'g', 'g', 'w'],
@@ -29,7 +29,7 @@ export class InertiaLevelManager {
 
         
         const level2 = new InertiaLevel(
-            'level2',
+            '2',
             [
                 ['j', 'g', 'c', 'g', 'g', 'w', 'j', 'j', 'g', 'g'],
                 ['c', 'g', 'j', 'g', 'j', 'g', 'c', 'g', 'g', 'w'],
@@ -47,7 +47,7 @@ export class InertiaLevelManager {
         )
 
         const level3 = new InertiaLevel(
-            'level3',
+            '3',
             [
                 ['j', 'g', 'c', 'g', 'g', 'w', 'j', 'j', 'g', 'g'],
                 ['c', 'g', 'j', 'g', 'j', 'g', 'c', 'g', 'c', 'w'],
