@@ -7,8 +7,8 @@ import { InertiaLevel } from '../../game/inertia/InertiaLevel'
 
 const inertia = new Inertia(10, 10)
 const levels: Map<string, InertiaLevel> = inertia.getLevels()
-console.log([...levels.keys()])
 export const InertiaApp = () => {
+    console.log([...levels.keys()])
     const [refresh, setRefresh] = useState(false)
 
     const handleReset = () => {
@@ -39,14 +39,14 @@ export const InertiaApp = () => {
         <div className="inertia__app">
             <h1> INERTIA </h1>
             <Select labelId="label" id="select" onChange={(e: any) => handleChange(e)}>
-                {/* {
-                    [...levels].map((v, index) => {
-                        <MenuItem value={index + 1}> v </MenuItem>
-                    })
-                } */}
-                <MenuItem value="1"> 1 </MenuItem>
+                {
+                    [...levels.keys()].map(i => (
+                        <MenuItem value={i}> {i} </MenuItem>
+                    ))
+                }
+                {/* <MenuItem value="1"> 1 </MenuItem>
                 <MenuItem value="2"> 2 </MenuItem>
-                <MenuItem value="3"> 3 </MenuItem>
+                <MenuItem value="3"> 3 </MenuItem> */}
             </Select>
             <div>
                 <Button onClick={() => handleReset()}> Reset </Button>

@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, Snackbar} from '@material-ui/core';
+import { Button, FormControl, InputLabel, MenuItem, Select, Snackbar } from '@material-ui/core';
 import { request } from 'http';
 import * as React from 'react';
 import { SokobanMoveCommand } from '../ds/SokobanMoveCommand';
@@ -114,6 +114,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
   }
   public render() {
     let board = this.props.game.getBoard()
+    let levels = this.props.game.getLevels()
     return (
       <div>
         {/* <HudComponent
@@ -126,10 +127,12 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
         <h1>Sokoban</h1>
         <div className='hud'>
           <InputLabel id="label">Levels</InputLabel>
-          <Select labelId="label" id="select" onChange={(e: any)=>this.handleChange(e)}>
-            <MenuItem value="1"> 1 </MenuItem>
-            <MenuItem value="2"> 2 </MenuItem>
-            <MenuItem value="3"> 3 </MenuItem>
+          <Select labelId="label" id="select" onChange={(e: any) => this.handleChange(e)}>
+            {
+              [...levels.keys()].map(i => (
+                <MenuItem value={i}> {i} </MenuItem>
+              ))
+            }
           </Select>
           <Button variant="outlined" color='primary' onClick={() => { this.handleReset() }}> reset </Button>
           <Button variant="outlined" color='primary' onClick={() => { this.handleUndoClick() }}> undo </Button>
@@ -160,11 +163,11 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
           </div>
         </div>
         <Snackbar
-          anchorOrigin={{vertical: 'bottom', horizontal:'left'}}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           autoHideDuration={1000}
           message="The level is cleared"
           open={this.state.won}
-          onClose={()=>{}}
+          onClose={() => { }}
         />
       </div>
     );

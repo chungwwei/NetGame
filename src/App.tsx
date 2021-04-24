@@ -51,7 +51,7 @@ function App() {
                 <Card className='home--card'>
                   <CardActionArea>
                     <CardContent className='home--card--content'>
-                      <h1> Inertia [Under Development]</h1>
+                      <h1> Inertia </h1>
                     </CardContent>
                   </CardActionArea>
                 </Card>
