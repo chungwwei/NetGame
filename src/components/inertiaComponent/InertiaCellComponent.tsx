@@ -1,9 +1,10 @@
 import React from "react"
 import { Inertia } from "../../game/inertia/Inertia"
-import player from '../../images/player.png'
+import player from '../../images/circle_player.png'
 import wall from '../../images/wall.png'
-import gem from '../../images/4ways.png'
-import bomb from '../../images/box.png'
+import gem from '../../images/coin.png'
+import bomb from '../../images/bomb.png'
+import brokenCircle from '../../images/broken_circle.png'
 
 export const InertiaCellComponent: React.FC<InertiaCellProps> = (props) => {
     const {
@@ -20,8 +21,8 @@ export const InertiaCellComponent: React.FC<InertiaCellProps> = (props) => {
     } = props
 
     const cellClassName = 
-        isBrokenCirlce ?
-        'inertia_broken_circle':
+        isBrokenCirlce ? 
+        'inertia_broken_circle' :
         'inertia_ground'
     // const cellClassName = isPlayer
     //     ? 'inertia_player'
@@ -42,7 +43,7 @@ export const InertiaCellComponent: React.FC<InertiaCellProps> = (props) => {
         : isWall
         ? wall
         : isBrokenCirlce
-        ? 'inertia_broken_circle'
+        ? brokenCircle
         : isGem
         ? gem
         : isBomb

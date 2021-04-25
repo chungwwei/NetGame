@@ -2,8 +2,11 @@
   text-align: center;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+
 body {
-  background-color: #282c34;
+  background-color: #c9d1e1;
+  font-family: 'Roboto', sans-serif;
 }
 
 .App-logo {
@@ -241,7 +244,7 @@ body {
   margin-bottom: 3px;
   float: left;
   border-radius: 3px;
-  background: #d03636;
+  background: #884d4d;
   text-align: center;
   vertical-align: middle;
   line-height: 100px;       /* The same as your div height */

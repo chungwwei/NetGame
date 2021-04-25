@@ -13,6 +13,8 @@ import { Card, CardContent, CardActionArea } from '@material-ui/core';
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import { InertiaApp } from './components/inertiaComponent/InertiaApp';
 import { Inertia } from './game/inertia/Inertia';
+import { AppBarComponent } from './components/home/AppBarComponent';
+import { CollectionComponent } from './components/home/CollectionComponent';
 
 function App() {
   // var light_off = new LightOff(5, 5)
@@ -23,54 +25,14 @@ function App() {
     <div className='App'>
       {/* <Router basename={process.env.PUBLIC_URL}> */}
       <Router>
-        <h1>HOME</h1>
-        {/* <header className="App-header">
-          </header> */}
         <Switch>
-          <Route exact path="/">
-            <div className='home__cards'>
-              <Link to='/sokoban'>
-                <Card className='home--card'>
-                  <CardActionArea>
-                    <CardContent className='home--card--content'>
-                      <h1> Sokoban </h1>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Link>
-              <Link to='/flushtubes'>
-                <Card className='home--card'>
-                  <CardActionArea>
-                    <CardContent className='home--card--content'>
-                      <h1> Flush Tubes [Under Development]</h1>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Link>
-              <Link to='/inertia'>
-                <Card className='home--card'>
-                  <CardActionArea>
-                    <CardContent className='home--card--content'>
-                      <h1> Inertia </h1>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Link>
-            </div>
-          </Route>
-          <Route path="/inertia">
-            <InertiaApp />
-          </Route>
-          <Route path="/sokoban">
-            <SokobanComponent game={sokoban}></SokobanComponent>
-          </Route>
-          <Route path='/flushtubes'>
-            <HudComponent game={flood_tube}></HudComponent>
-          </Route>
+          <AppBarComponent />
         </Switch>
-
-        {/* <SokobanComponent game={sokoban}></SokobanComponent> */}
+        <CollectionComponent />
+        <p> Enjoy the classic puzzles games </p>
+        <p> Made By ChuangWei Ma</p>
       </Router>
+
     </div>
   );
 }
