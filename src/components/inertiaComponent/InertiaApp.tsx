@@ -58,7 +58,8 @@ export const InertiaApp = () => {
                 <InertiaComponent game={inertia}></InertiaComponent>
             </div>
             <div> instruction </div>
-            <div> about </div>
+                <p> Trying to collect coins as many as possible. Click undo if you step on a bomb. </p>
+            {/* <div> about </div> */}
         </div>
     )
 }
