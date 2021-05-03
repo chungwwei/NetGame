@@ -3,6 +3,7 @@ import { Inertia } from '../../game/inertia/Inertia'
 import { InertiaComponent } from './InertiaComponent'
 import { Button, Typography, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import { InertiaLevel } from '../../game/inertia/InertiaLevel'
+import { Timer } from '../Timer'
 
 
 const inertia = new Inertia(10, 10)
@@ -10,10 +11,12 @@ const levels: Map<string, InertiaLevel> = inertia.getLevels()
 export const InertiaApp = () => {
     console.log([...levels.keys()])
     const [refresh, setRefresh] = useState(false)
+    const [resetTimer, setResetTimer] = useState(false)
 
     const handleReset = () => {
         inertia.reset()
         setRefresh(prev => !prev)
+        setResetTimer(prev => !prev)
     }
 
     const handleRedo = () => {
@@ -33,6 +36,7 @@ export const InertiaApp = () => {
         let requestedLevel: string = event.target.value
         inertia.loadLevel(requestedLevel)
         setRefresh(prev => !prev)
+        setResetTimer(prev => !prev)
     }
 
     return (
@@ -52,6 +56,7 @@ export const InertiaApp = () => {
                 <Button onClick={() => handleReset()}> Reset </Button>
                 <Button onClick={() => handleUndo()}> Undo </Button>
                 <Button onClick={() => handleRedo()}> Redo </Button>
+                <Timer resetTimer={resetTimer}></Timer>
             </div>
 
             <div>

@@ -7,6 +7,7 @@ import { Sokoban } from '../game/sokoban/Sokoban';
 import { CellComponent } from './CellComponent';
 import { HudComponent } from './HudComponent'
 import { SokobanCellComponent } from './SokobanCellComponent';
+import { Timer } from './Timer';
 
 
 export interface SokobanProps {
@@ -17,6 +18,7 @@ export interface SokobanState {
   refresh: boolean
   moves: number
   won: boolean
+  resetTime: boolean
 
 }
 
@@ -30,6 +32,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
       moves: 0,
       refresh: false,
       won: false,
+      resetTime: false
     }
   }
 
@@ -100,7 +103,8 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     this.props.game.loadLevel(curLevel)
     this.setState({
       moves: 0,
-      refresh: !this.state.refresh
+      refresh: !this.state.refresh,
+      resetTime: !this.state.resetTime
     })
   }
 
@@ -109,7 +113,8 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
     this.props.game.loadLevel(requestedLevel)
     this.setState({
       moves: 0,
-      refresh: !this.state.refresh
+      refresh: !this.state.refresh,
+      resetTime: !this.state.resetTime
     })
   }
   public render() {
@@ -125,6 +130,7 @@ export default class SokobanComponent extends React.Component<SokobanProps, Soko
 
           ></HudComponent> */}
         <h1>Sokoban</h1>
+        <Timer resetTimer={this.state.resetTime}></Timer>
         <div className='hud'>
           <InputLabel id="label">Levels</InputLabel>
           <Select labelId="label" id="select" onChange={(e: any) => this.handleChange(e)}>
