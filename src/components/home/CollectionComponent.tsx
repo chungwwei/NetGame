@@ -6,6 +6,7 @@ import SokobanComponent from '../SokobanComponent';
 import { HudComponent } from '../HudComponent';
 import { FloodTubes } from '../../game/FloodTube';
 import { Sokoban } from '../../game/sokoban/Sokoban';
+import { LightUpApp } from '../lightupComponent/LightUpApp';
 
 const useStyles = makeStyles({
     collectionCard: {
@@ -63,6 +64,17 @@ export const CollectionComponent = () => {
                                 </Card>
                             </Grid>
                         </Link>
+                        <Link to='/lightup'>
+                            <Grid item xs={12} sm={6}>
+                                <Card className={classes.collectionCard}>
+                                    <CardActionArea>
+                                        <CardContent>
+                                            <h1> Light Up </h1>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
+                        </Link>
                     </Grid>
                 </Route>
                 <Route path="/inertia">
@@ -74,6 +86,10 @@ export const CollectionComponent = () => {
                 <Route path='/flushtubes'>
                     <HudComponent game={flood_tube}></HudComponent>
                 </Route>
+                <Route path='/lightup'>
+                    <LightUpApp />
+                </Route>
+
 
             </div>
 
