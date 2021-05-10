@@ -6,16 +6,16 @@ import { LightUpCellComponent } from './LightUpCellComponent'
 export class Pair {
     public i: number
     public j: number
-    constructor(i: number, j: number){
+    constructor(i: number, j: number) {
         this.i = i
         this.j = j
     }
 }
 
 const tuples: Pair[][] = []
-for (let i = 0; i < 10; i ++) {
+for (let i = 0; i < 10; i++) {
     let a = []
-    for (let j = 0; j < 10; j ++) {
+    for (let j = 0; j < 10; j++) {
         a.push(new Pair(i, j))
     }
     tuples.push(a)
@@ -38,7 +38,7 @@ export const LightUpComponent: React.FC<LightUpProps> = props => {
         setToggle(toggle)
         setToggleCells(toggleCells)
         setAllCells(allCells)
-        
+
         // setRefresh(pre => !pre)
     }
 
@@ -104,6 +104,7 @@ export const LightUpComponent: React.FC<LightUpProps> = props => {
                                     isCross={item.getIsCross()}
                                     isEmpty={item.getIsEmpty()}
                                     isLight={item.getIsLight()}
+                                    lightNum={item.getLightsNum()}
                                 ></LightUpCellComponent>
                             ))}
                         </div>

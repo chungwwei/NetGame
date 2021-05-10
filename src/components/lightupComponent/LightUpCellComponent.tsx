@@ -14,7 +14,12 @@ export const LightUpCellComponent: React.FC<LightUpCellProps> = (props) => {
         isBlock,
         isCross,
         isEmpty,
+        lightNum,
     } = props
+    var lightLimit = ''
+    if (lightNum >= 0) {
+        lightLimit = lightNum + ''
+    }
 
     const cellClassName = isBlock ? 
         'inertia_broken_circle' 
@@ -52,6 +57,7 @@ export const LightUpCellComponent: React.FC<LightUpCellProps> = (props) => {
                 // className={'img'}
                 src={imgName} alt={''}
             />
+            <text> {lightLimit } </text>
         </div>
     )
 }
@@ -67,6 +73,8 @@ interface LightUpCellProps {
     isBlock: boolean
     isCross: boolean
     isEmpty: boolean
+
+    lightNum: number
 
     onClick: any
 }

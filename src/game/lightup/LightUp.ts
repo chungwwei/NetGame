@@ -29,6 +29,7 @@ export class LightUp {
     private colsLimit: number[]
 
     constructor(row: number, col: number) {
+
         this.numberOfBoxes = -1
         this.commandManager = new CommandManager()
         this.levelManager = new LightUpLevelManager()
@@ -57,6 +58,7 @@ export class LightUp {
                 this.board[i].push(node)
             }
         }
+
 
         this.lightbulbs = new NumberArraySet()
         this.rowsLimit = []
@@ -99,7 +101,7 @@ export class LightUp {
             return [toggleCells, toggle!!, allCells]
         }
     }
-
+    
     // public refreshBoard() {
     //     for (let i = 0; i < this.R; i ++) {
     //         for (let j = 0; j < this.C; j ++) {
@@ -135,6 +137,7 @@ export class LightUp {
     //         else
     //             enlightenCells.push([x, i])
     //     }
+
 
     //     for (let i = y; i >= 0; i --) {
     //         let cell = this.board[x][i]
