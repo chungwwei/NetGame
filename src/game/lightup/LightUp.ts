@@ -1,4 +1,4 @@
-import { lighten } from "@material-ui/core"
+import { light } from "@material-ui/core/styles/createPalette"
 import { CommandManager } from "../../ds/CommandManager"
 import { InertiaMoveCommand } from "../../ds/InertiaMoveCommand"
 import { NumberArraySet } from "../../ds/NumberArraySet"
@@ -27,6 +27,7 @@ export class LightUp {
     private lightbulbs: NumberArraySet
     private rowsLimit: number[]
     private colsLimit: number[]
+    private lightWalls: number[][]
 
     constructor(row: number, col: number) {
 
@@ -44,6 +45,7 @@ export class LightUp {
         let layer = startLevel.getBaseLayer()
 
         // init board
+        this.lightWalls = []
         this.board = []
         this.R = row
         this.C = col
@@ -55,6 +57,9 @@ export class LightUp {
                 let lightsNum = -1
                 if (layer[i][j] !== 'e') lightsNum = +layer[i][j]
                 let node = new LightUpCell(i, j, layer[i][j], false, isBlock, false, isEmpty, lightsNum, false)
+                if (layer[i][j] !== 'b' && layer[i][j] !== 'e') {
+                    this.lightWalls.push([i, j])
+                }
                 this.board[i].push(node)
             }
         }
@@ -63,8 +68,8 @@ export class LightUp {
         this.lightbulbs = new NumberArraySet()
         this.rowsLimit = []
         this.colsLimit = []
-        for (let i = 0; i < this.R; i ++) { this.rowsLimit.push(0) }
-        for (let i = 0; i < this.C; i ++) { this.colsLimit.push(0) }
+        for (let i = 0; i < this.R; i++) { this.rowsLimit.push(0) }
+        for (let i = 0; i < this.C; i++) { this.colsLimit.push(0) }
 
         // let command = new InertiaMoveCommand(this, this.getBoard(), this.player)
         // this.commandManager.execute(command)
@@ -72,14 +77,14 @@ export class LightUp {
 
     public move(x: number, y: number): [number[][], Toggle, number[][]] {
         // the cell is blocking or crossed-out
-        if (this.board[x][y].getIsBlock() || this.board[x][y].getIsCross()) 
+        if (this.board[x][y].getIsBlock() || this.board[x][y].getIsCross())
             return [[], Toggle.NOTAPPLICABLE, []]
 
         var toggle = null
         let cell = this.board[x][y]
-        if (cell.getIsLight()) 
+        if (cell.getIsLight())
             toggle = Toggle.OFF
-        else 
+        else
             toggle = Toggle.ON
 
         var toggleCells: number[][] = []
@@ -101,87 +106,114 @@ export class LightUp {
             return [toggleCells, toggle!!, allCells]
         }
     }
-    
-    // public refreshBoard() {
-    //     for (let i = 0; i < this.R; i ++) {
-    //         for (let j = 0; j < this.C; j ++) {
-    //             let cell = this.board[i][j]
-    //             if (cell.getIsLight()) {
-    //                 this.ligthenNeighbors(i, j)
-    //             }
-    //         }
-    //     }
-    // }
 
-    // private ligthenNeighbors(x: number, y: number) {
-    //     for (let i = x; i >= 0; i --) {
-    //         let cell = this.board[i][y]
-    //         if (cell.getIsCross() || cell.getIsBlock())
-    //             break
-    //         else
-    //             cell.setIsLight(true)
-    //     }
+    private countEnlightenCells() {
+        let set = new NumberArraySet()
+        for (const [x, y] of this.lightbulbs) {
+            for (let i = x; i >= 0; i--) {
+                let cell = this.board[i][y]
+                if (cell.getIsCross() || cell.getIsBlock())
+                    break
+                else
+                    set.add([i, y])
+            }
 
-    //     for (let i = x; i < this.R; i ++) {
-    //         let cell = this.board[i][y]
-    //         if (cell.getIsCross() || cell.getIsBlock())
-    //             break
-    //         else
-    //             cell.setIsLight(true)
-    //     }
+            for (let i = x; i < this.R; i++) {
+                let cell = this.board[i][y]
+                if (cell.getIsCross() || cell.getIsBlock())
+                    break
+                else
+                    set.add([i, y])
+            }
 
-    //     for (let i = y; i < this.C; i ++) {
-    //         let cell = this.board[x][i]
-    //         if (cell.getIsCross() || cell.getIsBlock())
-    //             break
-    //         else
-    //             enlightenCells.push([x, i])
-    //     }
+            for (let i = y; i < this.C; i++) {
+                let cell = this.board[x][i]
+                if (cell.getIsCross() || cell.getIsBlock())
+                    break
+                else
+                    set.add([x, i])
+            }
 
 
-    //     for (let i = y; i >= 0; i --) {
-    //         let cell = this.board[x][i]
-    //         if (cell.getIsCross() || cell.getIsBlock())
-    //             break
-    //         else
-    //             enlightenCells.push([x, i])
-    //     }
-    // }
+            for (let i = y; i >= 0; i--) {
+                let cell = this.board[x][i]
+                if (cell.getIsCross() || cell.getIsBlock())
+                    break
+                else
+                    set.add([x, i])
+            }
+        }
+        return set
+    }
 
-    public hasWon(): boolean {
-        let lightLimits = []
-        for (let i = 0; i < this.R; i ++) {
-            for (let j = 0; j < this.C; j ++) {
-                if (this.board[i][j].getLightsNum() >= 0) {
-                    lightLimits.push([i, j, this.board[i][j].getLightsNum()])
+
+    private lightConflict() {
+        for (const [x, y] of this.lightbulbs) {
+            for (let i = x - 1; i >= 0; i--) {
+                let cell = this.board[i][y]
+                if (cell.getIsCross() || cell.getIsBlock())
+                    break
+                if (cell.getIsLight()) {
+                    return true
+                }
+            }
+
+            for (let i = x + 1; i < this.R; i++) {
+                let cell = this.board[i][y]
+                if (cell.getIsCross() || cell.getIsBlock())
+                    break
+                if (cell.getIsLight()) {
+                    return true
+                }
+
+            }
+
+            for (let i = y + 1; i < this.C; i++) {
+                let cell = this.board[x][i]
+                if (cell.getIsCross() || cell.getIsBlock())
+                    break
+                if (cell.getIsLight()) {
+                    return true
+                }
+            }
+
+
+            for (let i = y - 1; i >= 0; i--) {
+                let cell = this.board[x][i]
+                if (cell.getIsCross() || cell.getIsBlock())
+                    break
+                if (cell.getIsLight()) {
+                    return true
                 }
             }
         }
+        return false
+    }
 
+    public hasWon(): boolean {
         // check if all cells are lit
-        if (this.lightbulbs.length !== this.levelManager.getLevelRequirement()) {
+        let lighten = this.countEnlightenCells()
+        if (lighten.length !== this.levelManager.getLevelRequirement()) {
             return false
-        } 
+        }
 
         // light checks
-        for (const [i, j, limit] of lightLimits) {
+        for (const [i, j] of this.lightWalls) {
+            let cnt = 0
             for (const [ni, nj] of [[i + 1, j], [i - 1, j], [i, j + 1], [i, j - 1]]) {
-                let cnt = 0
                 if (this.isWithinBound(ni, nj) && this.board[ni][nj].getIsLight()) {
                     cnt += 1
                 }
-                if (cnt != limit) return false
+            }
+            let limit = this.board[i][j].getLightsNum()
+            if (limit !== -1 && cnt != limit) {
+                return false
             }
         }
 
         // no two lights on the same row or col
-        for (let i = 0; i < this.R; i ++) {
-            for (let j = 0; j < this.C; j ++) {
-                if (this.board[i][j].getIsLight()) {
-                    if (this.rowsLimit[i] > 1 || this.colsLimit[j] > 1) return false 
-                }
-            }
-        }
+        if (this.lightConflict()) return false
+
         return true
     }
 
