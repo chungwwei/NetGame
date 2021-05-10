@@ -3,16 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import './home.css';
 import BoardComponent from './components/BoardComponent';
-import { LightOff } from './game/LightOff';
-import FloodTubeComponent from './components/FloodTubeComponent';
 import { FloodTubes } from './game/FloodTube';
-import { HudComponent } from './components/HudComponent';
-import SokobanComponent from './components/SokobanComponent';
 import { Sokoban } from './game/sokoban/Sokoban';
-import { Card, CardContent, CardActionArea } from '@material-ui/core';
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
-import { InertiaApp } from './components/inertiaComponent/InertiaApp';
-import { Inertia } from './game/inertia/Inertia';
 import { AppBarComponent } from './components/home/AppBarComponent';
 import { CollectionComponent } from './components/home/CollectionComponent';
 

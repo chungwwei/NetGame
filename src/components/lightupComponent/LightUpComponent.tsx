@@ -1,3 +1,4 @@
+import { Snackbar } from '@material-ui/core'
 import { useState, useEffect, useRef } from 'react'
 import { LightUp, Toggle } from '../../game/lightup/LightUp'
 import { LightUpCellComponent } from './LightUpCellComponent'
@@ -5,16 +6,16 @@ import { LightUpCellComponent } from './LightUpCellComponent'
 export class Pair {
     public i: number
     public j: number
-    constructor(i: number, j: number){
+    constructor(i: number, j: number) {
         this.i = i
         this.j = j
     }
 }
 
 const tuples: Pair[][] = []
-for (let i = 0; i < 10; i ++) {
+for (let i = 0; i < 10; i++) {
     let a = []
-    for (let j = 0; j < 10; j ++) {
+    for (let j = 0; j < 10; j++) {
         a.push(new Pair(i, j))
     }
     tuples.push(a)
@@ -37,7 +38,7 @@ export const LightUpComponent: React.FC<LightUpProps> = props => {
         setToggle(toggle)
         setToggleCells(toggleCells)
         setAllCells(allCells)
-        
+
         // setRefresh(pre => !pre)
     }
 
@@ -103,12 +104,20 @@ export const LightUpComponent: React.FC<LightUpProps> = props => {
                                     isCross={item.getIsCross()}
                                     isEmpty={item.getIsEmpty()}
                                     isLight={item.getIsLight()}
+                                    lightNum={item.getLightsNum()}
                                 ></LightUpCellComponent>
                             ))}
                         </div>
                     ))
                 }
             </div>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                autoHideDuration={1000}
+                message="The level is cleared"
+                open={game.win()}
+                onClose={() => { }}
+            />
         </div>
     )
 }

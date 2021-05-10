@@ -16,7 +16,7 @@ export class LightUpLevelManager {
                 ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
                 ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
                 ['e', 'e', 'e', 'e', 'e', 'e', '2', '0', 'e', 'e'],
-                ['e', 'e', 'e', '0', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'b', 'e', 'e', 'e', 'e', 'e', 'e'],
                 ['e', 'e', 'e', '1', 'e', 'e', 'e', 'e', 'e', 'e'],
                 ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
                 ['e', 'e', 'e', 'e', 'e', 'e', '0', '0', 'e', 'e'],
@@ -29,17 +29,29 @@ export class LightUpLevelManager {
         
         const level2 = new LightUpLevel(
             '2',
+            // [
+            //     ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+            //     ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'],
+            //     ['b', 'b', 'e', 'e', '0', 'e', '1', 'e', 'e', 'b'],
+            //     ['b', 'b', 'e', '0', 'e', 'e', 'e', '0', 'e', 'b'],
+            //     ['b', 'b', 'e', 'b', 'e', 'e', 'e', 'e', 'e', 'b'],
+            //     ['b', 'b', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'b'],
+            //     ['b', 'b', 'e', '1', 'e', 'e', 'e', '2', 'e', 'b'],
+            //     ['b', 'b', 'e', 'e', '1', 'e', '2', 'e', 'e', 'b'],
+            //     ['b', 'b', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'b'],
+            //     ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b']
+            // ],
             [
-                ['j', 'g', 'c', 'g', 'g', 'w', 'j', 'j', 'g', 'g'],
-                ['c', 'g', 'j', 'g', 'j', 'g', 'c', 'g', 'g', 'w'],
-                ['g', 'j', 'g', 'g', 'j', 'g', 'g', 'g', 'g', 'c'],
-                ['c', 'j', 'g', 'g', 'c', 'w', 'w', 'g', 'g', 'g'],
-                ['c', 'g', 'c', 'w', 'b', 'g', 'g', 'g', 'w', 'c'],
-                ['c', 'w', 'c', 'g', 'b', 'g', 'w', 'c', 'c', 'j'],
-                ['g', 'g', 'c', 'c', 'j', 'c', 'g', 'g', 'g', 'j'],
-                ['j', 'j', 'w', 'c', 'j', 'c', 'w', 'g', 'b', 'j'],
-                ['g', 'j', 'j', 'g', 'j', 'w', 'g', 'g', 'g', 'j'],
-                ['j', 'j', 'j', 'g', 'j', 'g', 'j', 'w', 'g', 'g']
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', '2', '0', 'e', 'e'],
+                ['e', 'e', 'e', 'b', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', '1', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', '0', '0', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+                ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e']
             ],
             5
         )
@@ -107,9 +119,15 @@ export class LightUpLevelManager {
 
     public getLevel(requestedLevel: string) {
         
-        if (requestedLevel !== undefined || requestedLevel !== null) {
+        if (requestedLevel !== undefined && requestedLevel !== null) {
             return this.levels.get(requestedLevel)
         }
         return 
+    }
+
+    public getLevelRequirement() {
+        if (this.curLevel !== undefined && this.curLevel !== null) {
+            return this.levels.get(this.curLevel)?.getLevelLightRequirement()
+        }
     }
 }
