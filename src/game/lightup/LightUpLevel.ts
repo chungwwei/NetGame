@@ -17,4 +17,14 @@ export class LightUpLevel {
     public getLevelName() { return this.levelName }
     public getMinLights() { return this.minLights }
 
+    public getLevelLightRequirement(): number {
+        let cnt = 0
+        for (let i = 0; i < this.baseLayer.length; i ++) {
+            for (let j = 0; j < this.baseLayer[i].length; j ++) {
+                if (this.baseLayer[i][j] === 'e') cnt += 1
+            }
+        }
+        return cnt
+    }
+
 }

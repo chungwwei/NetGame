@@ -1,7 +1,7 @@
 import { lighten } from "@material-ui/core"
-import { Rowing } from "@material-ui/icons"
 import { CommandManager } from "../../ds/CommandManager"
 import { InertiaMoveCommand } from "../../ds/InertiaMoveCommand"
+import { NumberArraySet } from "../../ds/NumberArraySet"
 import { LightUpCell } from "./LightUpCell"
 import { LightUpLevel } from "./LightUpLevel"
 import { LightUpLevelManager } from "./LightUpLevelManager"
@@ -24,6 +24,9 @@ export class LightUp {
     private numberOfBoxes: number
     private levelManager: LightUpLevelManager
 
+    private lightbulbs: NumberArraySet
+    private rowsLimit: number[]
+    private colsLimit: number[]
 
     constructor(row: number, col: number) {
         this.numberOfBoxes = -1
@@ -55,6 +58,12 @@ export class LightUp {
             }
         }
 
+        this.lightbulbs = new NumberArraySet()
+        this.rowsLimit = []
+        this.colsLimit = []
+        for (let i = 0; i < this.R; i ++) { this.rowsLimit.push(0) }
+        for (let i = 0; i < this.C; i ++) { this.colsLimit.push(0) }
+
         // let command = new InertiaMoveCommand(this, this.getBoard(), this.player)
         // this.commandManager.execute(command)
     }
@@ -73,11 +82,17 @@ export class LightUp {
 
         var toggleCells: number[][] = []
         if (toggle === Toggle.ON) {
+            this.lightbulbs.add([x, y])
+            this.rowsLimit[x] += 1
+            this.colsLimit[y] += 1
             this.board[x][y].setIsLight(!this.board[x][y].getIsLight())
             toggleCells = this.findAllEnlightenCells(x, y)
             // let allCells = this.getLightenCells()
             return [toggleCells, toggle!!, []]
         } else {
+            this.lightbulbs.remove([x, y])
+            this.rowsLimit[x] -= 1
+            this.colsLimit[y] -= 1
             toggleCells = this.findAllEnlightenCells(x, y)
             this.board[x][y].setIsLight(!this.board[x][y].getIsLight())
             let allCells = this.getLightenCells()
@@ -131,7 +146,40 @@ export class LightUp {
     // }
 
     public hasWon(): boolean {
-        return false
+        let lightLimits = []
+        for (let i = 0; i < this.R; i ++) {
+            for (let j = 0; j < this.C; j ++) {
+                if (this.board[i][j].getLightsNum() >= 0) {
+                    lightLimits.push([i, j, this.board[i][j].getLightsNum()])
+                }
+            }
+        }
+
+        // check if all cells are lit
+        if (this.lightbulbs.length !== this.levelManager.getLevelRequirement()) {
+            return false
+        } 
+
+        // light checks
+        for (const [i, j, limit] of lightLimits) {
+            for (const [ni, nj] of [[i + 1, j], [i - 1, j], [i, j + 1], [i, j - 1]]) {
+                let cnt = 0
+                if (this.isWithinBound(ni, nj) && this.board[ni][nj].getIsLight()) {
+                    cnt += 1
+                }
+                if (cnt != limit) return false
+            }
+        }
+
+        // no two lights on the same row or col
+        for (let i = 0; i < this.R; i ++) {
+            for (let j = 0; j < this.C; j ++) {
+                if (this.board[i][j].getIsLight()) {
+                    if (this.rowsLimit[i] > 1 || this.colsLimit[j] > 1) return false 
+                }
+            }
+        }
+        return true
     }
 
     public undo() {
@@ -173,16 +221,16 @@ export class LightUp {
     }
 
     private getLightenCells(): number[][] {
-        let lightBulbs = []
-        for (let i = 0; i < this.R; i ++) {
-            for (let j = 0; j < this.C; j ++) {
-                if (this.board[i][j].getIsLight()) {
-                    lightBulbs.push([i, j])
-                }
-            }
-        }
+        // let lightBulbs = []
+        // for (let i = 0; i < this.R; i ++) {
+        //     for (let j = 0; j < this.C; j ++) {
+        //         if (this.board[i][j].getIsLight()) {
+        //             lightBulbs.push([i, j])
+        //         }
+        //     }
+        // }
         let res: number[][] = []
-        for (const [i, j] of lightBulbs) {
+        for (const [i, j] of this.lightbulbs) {
             res = [...res, ...this.findAllEnlightenCells(i, j)]
         }
         return res

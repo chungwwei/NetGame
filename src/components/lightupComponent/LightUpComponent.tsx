@@ -1,3 +1,4 @@
+import { Snackbar } from '@material-ui/core'
 import { useState, useEffect, useRef } from 'react'
 import { LightUp, Toggle } from '../../game/lightup/LightUp'
 import { LightUpCellComponent } from './LightUpCellComponent'
@@ -109,6 +110,13 @@ export const LightUpComponent: React.FC<LightUpProps> = props => {
                     ))
                 }
             </div>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                autoHideDuration={1000}
+                message="The level is cleared"
+                open={game.hasWon()}
+                onClose={() => { }}
+            />
         </div>
     )
 }
